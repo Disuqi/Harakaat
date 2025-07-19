@@ -90,9 +90,8 @@ function Exercise({
 
     // Update circle position when letterIndex changes
     useEffect(() => {
-        if (!highlightedLetterRef.current) return;
-
-        const updatePosition = () => {
+        // Use a small delay to ensure DOM has updated after exercise/letterIndex changes
+        const timer = setTimeout(() => {
             if (!highlightedLetterRef.current || !h2Ref.current) return;
 
             const letterRect = highlightedLetterRef.current.getBoundingClientRect();
@@ -108,19 +107,39 @@ function Exercise({
                 width: letterRect.width + 5,
                 height: 36
             });
-        };
+        }, 10); // Small delay to ensure DOM is updated
 
-        // Update immediately
-        updatePosition();
-
-        // Also update on window resize
-        const handleResize = () => {
-            updatePosition();
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        return () => clearTimeout(timer);
     }, [letterIndex]);
+
+    // Reset position when exercise changes
+    useEffect(() => {
+        // Reset letter index when exercise changes
+        setLetterIndex(0);
+        setPressedControl(InputControl.NONE);
+        setLetterPosition({ x: 0, y: 0, show: false }); // Hide position initially
+        
+        // Update position after a longer delay when exercise changes
+        const timer = setTimeout(() => {
+            if (!highlightedLetterRef.current || !h2Ref.current) return;
+
+            const letterRect = highlightedLetterRef.current.getBoundingClientRect();
+            const parentRect = h2Ref.current.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 };
+                    
+            setLetterPosition({
+                x: letterRect.left - parentRect.left + letterRect.width / 2,
+                y: letterRect.top - parentRect.top + letterRect.height / 2,
+                show: true
+            });
+            
+            setLetterSize({
+                width: letterRect.width + 5,
+                height: 36
+            });
+        }, 100); // Longer delay for exercise changes
+
+        return () => clearTimeout(timer);
+    }, [exercise]);
 
     // Reset mistake after animation
     useEffect(() => {
@@ -251,7 +270,7 @@ function Exercise({
                             exit={{ scale: 0.8, opacity: 0 }}
                             transition={{
                                 type: "spring",
-                                stiffness: 500,
+                                stiffness: 200,
                                 damping: 15,
                                 mass: 0.6,
                                 x: {
