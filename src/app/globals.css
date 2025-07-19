@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Harmattan:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Harmattan:wght@400;500;600;700&family=Scheherazade+New:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap');
 @import "tailwindcss";
 @plugin "daisyui";
 
@@ -10,7 +11,8 @@
 @theme
 {
     --font-title: "Harmattan", sans-serif;
-    --font-arabic: "Scheherazade New", serif;
+    --font-arabic: "Noto Sans Arabic", sans-serif;
+    --font-quran: "Scheherazade New", serif;
     /* Light-Mode */
     --color-primary-100:#FF7F50;
     --color-primary-200:#dd6236;
@@ -23,8 +25,6 @@
     --color-bg-200:#ede4d3;
     --color-bg-300:#c4bcab;
     /* Dark-Mode */
-    --color-dark-accent-100:#8B4513;
-    --color-dark-accent-200:#ffd299;
     --color-dark-text-100:#FFFFFF;
     --color-dark-text-200:#d1d1d1;
     --color-dark-bg-100:#1a1a1a;

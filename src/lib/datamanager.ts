@@ -9,7 +9,7 @@ export interface ArabicExercise {
 
 export class DataManager {
     private static instance: DataManager;
-    private readonly pathToData: string = "quran_dataset.json";
+    private readonly pathToData: string = "formatted_quran_dataset.json";
     private exercises: ArabicExercise[] = [];
 
     private async init() {

@@ -1,13 +1,13 @@
 export const translations = {
   ar: {
     settings: {
-        allLetters: "جميع الحروف",
+        lastLetterOnly: "آخر حرف فقط",
         hideControls: "إخفاء عناصر التحكم",
     }
   },
   en: {
     settings: {
-        allLetters: "All Letters",
+        lastLetterOnly: "Last Letter Only",
         hideControls: "Hide Controls",
     }
   },
