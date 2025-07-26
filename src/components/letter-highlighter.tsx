@@ -3,16 +3,22 @@ import { AnimatePresence, motion } from "motion/react";
 export default function LetterHighlighter({
     mistake,
     position,
-    size,
+    letterSize,
+    animationDuration = 0.3,
 }: {
     mistake: boolean;
     position: { x: number; y: number };
-    size: { width: number; height: number };
+    letterSize: { width: number; height: number };
+    animationDuration?: number;
 }) {
+    const size = {
+        width: letterSize.width + 3,
+        height: 36,
+    };
     return (
         <AnimatePresence>
             <motion.div
-                className={`absolute pointer-events-none ${
+                className={`z-0 absolute pointer-events-none ${
                     mistake ? "bg-red-500" : "bg-primary-100"
                 }`}
                 style={{
@@ -21,16 +27,15 @@ export default function LetterHighlighter({
                     left: position.x - size.width / 2,
                     top: position.y - size.height / 2,
                     zIndex: 0,
-                    borderRadius: "4px",
+                    borderRadius: "3px",
                 }}
-                initial={{ scale: 0.8, opacity: 0 }}
+                initial={{ scale: 0.8 }}
                 animate={{
                     scale: mistake ? 1.3 : 1,
                     x: mistake ? [-2, 2, -2, 2, 0] : 0,
                     y: mistake ? [-2, 2, -2, 2, 0] : 0,
-                    opacity: 1,
                 }}
-                exit={{ scale: 0.8, opacity: 0 }}
+                exit={{ scale: 0.8 }}
                 transition={{
                     type: "spring",
                     stiffness: 200,
@@ -38,12 +43,12 @@ export default function LetterHighlighter({
                     mass: 0.6,
                     x: {
                         type: "tween",
-                        duration: 0.3,
+                        duration: animationDuration,
                         ease: "easeInOut",
                     },
                     y: {
                         type: "tween",
-                        duration: 0.3,
+                        duration: animationDuration,
                         ease: "easeInOut",
                     },
                 }}

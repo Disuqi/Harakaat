@@ -4,41 +4,37 @@ import { ActionEvent } from "@/lib/action";
 import { useKeyboardEvents } from "@/hooks/keyboard-events";
 import { useGlobalContext } from "@/hooks/global-context-provider";
 
-enum ControlKey {
+export enum InputControl {
     Up = "ArrowUp",
     Down = "ArrowDown",
     Left = "ArrowLeft",
     Right = "ArrowRight",
+    None = "",
 }
 
-const harakaat = {
-    up1: "◌َ",
-    up2: "◌ً",
-    down1: "◌ِ",
-    down2: "◌ٍ",
-    left1: "◌ُ",
-    left2: "◌ٌ",
-    right1: "◌ْ",
-    right2: "◌",
+export const ControlToHaraka: Record<InputControl, string[]> = {
+    [InputControl.Up]: ["َ", "ً", "ٰ", "ٓ"],
+    [InputControl.Down]: ["ِ", "ٍ"],
+    [InputControl.Left]: ["ُ", "ٌ"],
+    [InputControl.Right]: ["ْ", "", "ٓ", "ٰ"],
+    [InputControl.None]: [],
 };
 
 export default function Controls() {
     const ctx = useGlobalContext();
     const { keyDownEvent, keyUpEvent } = useKeyboardEvents();
 
-    const [pressedKeys, setPressedKeys] = useState<Set<ControlKey>>(new Set());
+    const [pressedKeys, setPressedKeys] = useState<Set<InputControl>>(new Set());
     const unpressedStyle =
         "border border-r-2 border-b-2 border-bg-300 dark:border-dark-bg-300 bg-bg-200 dark:bg-dark-bg-100 text-primary-100 dark:text-primary-100 w-10 h-10 text-center p-2 m-[0.1rem] rounded-sm flex justify-center items-center";
     const pressedStyle =
         "border border-primary-300 bg-primary-100 text-primary-300 w-10 h-10 text-center p-2 rounded-sm m-[0.1rem] flex justify-center items-center";
-    const harakaStyle =
-        "flex justify-center items-center text-4xl text-accent-100 dark:text-dark-text-100";
 
     const handleKeyDown = (event: KeyboardEvent) => {
         if (ctx.hideControls) return;
 
         const updatedPressedKeys = new Set(pressedKeys);
-        updatedPressedKeys.add(event.key as ControlKey);
+        updatedPressedKeys.add(event.key as InputControl);
 
         setPressedKeys(updatedPressedKeys);
     };
@@ -48,7 +44,7 @@ export default function Controls() {
         if (ctx.hideControls) return;
 
         const updatedPressedKeys = new Set(pressedKeys);
-        updatedPressedKeys.delete(event.key as ControlKey);
+        updatedPressedKeys.delete(event.key as InputControl);
 
         setPressedKeys(updatedPressedKeys);
     };
@@ -62,14 +58,10 @@ export default function Controls() {
                 } flex flex-col justify-center items-center transition-all ease-in-out duration-300`}
             >
                 <div className="flex flex-col items-center w-full">
-                    <div className={harakaStyle}>
-                        <p>{harakaat.up1}</p>
-                        <p className="font-light text-xl">/</p>
-                        <p>{harakaat.up2}</p>
-                    </div>
+                    <HarakaView control={InputControl.Up} />
                     <div
                         className={
-                            pressedKeys.has(ControlKey.Up)
+                            pressedKeys.has(InputControl.Up)
                                 ? pressedStyle
                                 : unpressedStyle
                         }
@@ -79,14 +71,10 @@ export default function Controls() {
                 </div>
                 <div className="flex justify-center items-start w-full">
                     <div className="flex items-center">
-                        <div className={harakaStyle}>
-                            <p>{harakaat.left1}</p>
-                            <p className="font-light text-xl">/</p>
-                            <p>{harakaat.left2}</p>
-                        </div>{" "}
+                        <HarakaView control={InputControl.Left} />
                         <div
                             className={
-                                pressedKeys.has(ControlKey.Left)
+                                pressedKeys.has(InputControl.Left)
                                     ? pressedStyle
                                     : unpressedStyle
                             }
@@ -97,37 +85,41 @@ export default function Controls() {
                     <div className="flex flex-col items-center">
                         <div
                             className={
-                                pressedKeys.has(ControlKey.Down)
+                                pressedKeys.has(InputControl.Down)
                                     ? pressedStyle
                                     : unpressedStyle
                             }
                         >
                             <ArrowDown />
                         </div>
-                        <div className={harakaStyle}>
-                            <p>{harakaat.down1}</p>
-                            <p className="font-light text-xl">/</p>
-                            <p>{harakaat.down2}</p>
-                        </div>{" "}
+                        <HarakaView control={InputControl.Down} />
                     </div>
                     <div className="flex items-center">
                         <div
                             className={
-                                pressedKeys.has(ControlKey.Right)
+                                pressedKeys.has(InputControl.Right)
                                     ? pressedStyle
                                     : unpressedStyle
                             }
                         >
                             <ArrowRight />
                         </div>
-                        <div className={harakaStyle}>
-                            <p>{harakaat.right1}</p>
-                            <p className="font-light text-xl">/</p>
-                            <p>{harakaat.right2}</p>
-                        </div>{" "}
+                        <HarakaView control={InputControl.Right} />
                     </div>
                 </div>
             </div>
         </>
+    );
+}
+
+export function HarakaView({ control }: { control: InputControl }) {
+    const haraka1 = ControlToHaraka[control][0];
+    const haraka2 = ControlToHaraka[control][1];
+    return (
+        <div className="flex text-center justify-center items-center text-4xl text-accent-100 dark:text-dark-text-100">
+            <p>◌{haraka1}</p>
+            <p className="text-sm font-extralight">/</p>
+            <p>◌{haraka2}</p>
+        </div>
     );
 }

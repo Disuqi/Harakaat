@@ -9,9 +9,10 @@ export default function Button({
     onClick?: () => void;
     disabled?: boolean;
 }) {
+    const classNames = "flex justify-center items-center gap-2 px-4 py-2 rounded-md border border-bg-300 bg-bg-100 text-text-200 text-sm hover:bg-bg-200 active:bg-bg-300 transform transition duration-200 hover:shadow-md";
     return (
         <button
-            className={`px-4 py-2 rounded-md text-center flex gap-2 items-center justify-center text-primary-100 border-bg-300 bg-bg-200 border hover:shadow-[4px_4px_0px_0px] hover:shadow-bg-300 dark:hover:shadow-dark-bg-300 active:shadow-none dark:border-dark-bg-300 dark:bg-dark-bg-100 active:border-primary-300 active:text-primary-300 active:bg-primary-100 font-medium text-sm transition-all duration-200 ${className}`}
+            className={`${classNames} ${className}`}
             onClick={onClick}
             disabled={disabled}
         >
